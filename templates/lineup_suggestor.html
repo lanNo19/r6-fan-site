@@ -105,8 +105,8 @@
                     return; // No map selected, nothing to load
                 }
 
-                // Fetch sites from the new API endpoint
-                fetch(`/api/map-sites/${encodeURIComponent(mapName)}`)
+                // Fetch sites from the new API endpoint (using blueprint endpoint for consistency)
+                fetch(`/api/map-sites/${encodeURIComponent(mapName)}`) // <-- NO CHANGE NEEDED HERE, as this is a direct API URL
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);

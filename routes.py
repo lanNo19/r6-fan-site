@@ -1,11 +1,13 @@
 # routes.py
 
 from flask import render_template, request, jsonify, Blueprint, url_for
-import requests
+import requests # Needed for LLM API calls
+import os # Needed to access environment variables for API key
 
-# Import db and models using absolute imports from the top-level 'app' module
-from app import db
-from models import Operator, Map, GameInfo
+# Import db and models using relative imports from the top-level 'app' module
+# This is correct when the project is treated as a package (due to __init__.py)
+from .app import db # <-- CHANGED THIS LINE
+from .models import Operator, Map, GameInfo # <-- CHANGED THIS LINE
 
 # Create a Blueprint instance
 main = Blueprint('main', __name__)
@@ -20,7 +22,6 @@ def operators():
     try:
         operators_data = Operator.query.all()
         attackers = [op for op in operators_data if op.side == 'Attacker']
-        # FIX: Corrected list comprehension syntax
         defenders = [op for op in operators_data if op.side == 'Defender']
         return render_template('operators.html', attackers=attackers, defenders=defenders)
     except Exception as e:
@@ -82,6 +83,22 @@ def game_info():
         print(f"Error fetching game info: {e}")
         return render_template('error.html', message="Could not load game information."), 500
 
+# NEW: API Endpoint for Map Sites (Moved from app.py)
+@main.route('/api/map-sites/<map_name>')
+def get_map_sites(map_name):
+    mock_map_data = {
+        "Bank": ["Vault", "Open Area - Teller", "Archives - Server", "CEO Office"],
+        "Oregon": ["Kitchen", "Kids Bedroom", "Basement"], # Simplified for example
+        "Coastline": ["Hookah Lounge / Billiards Room", "Blue Bar / Sunrise Bar", "Penthouse / Theater"],
+        "Kafe Dostoyevsky": ["Reading Room / Fireplace Hall", "Mining Room / Dining Room", "Kitchen / Bake Shop"],
+        "Kanal": ["Secure Containers / Boats", "Server Room / Kayak", "Coast Guard Office / Lounge"],
+        "Villa": ["Living Room / Bar", "Dining Room / Kitchen", "Classic Room / Games Room", "Statuary Room / Vault"],
+        # Add more maps and their sites as needed
+    }
+    sites = mock_map_data.get(map_name, [])
+    return jsonify(sites=sites)
+
+
 @main.route('/lineup-suggestor', methods=['GET', 'POST'])
 def lineup_suggestor():
     maps = Map.query.all() # Fetch all maps for the dropdown
@@ -129,7 +146,10 @@ def lineup_suggestor():
                 chat_history = []
                 chat_history.append({ "role": "user", "parts": [{ "text": prompt }] })
                 payload = { "contents": chat_history }
-                api_key = "" # Leave empty, Canvas will provide
+                # FIX: Get API key from environment variable
+                api_key = os.getenv("GOOGLE_API_KEY") # <-- CHANGED THIS LINE
+                if not api_key:
+                    raise ValueError("GOOGLE_API_KEY environment variable not set.")
 
                 # Call the Gemini API
                 api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + api_key
@@ -159,6 +179,9 @@ def lineup_suggestor():
             except requests.exceptions.RequestException as req_err:
                 print(f"API request failed: {req_err}")
                 error_message = "Failed to connect to the AI service. Please try again later."
+            except ValueError as val_err: # Catch the new ValueError for missing API key
+                print(f"Configuration error: {val_err}")
+                error_message = "Server configuration error: Google API Key not set."
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
                 error_message = "An unexpected error occurred while getting suggestions."

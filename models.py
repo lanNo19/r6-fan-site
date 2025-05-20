@@ -1,7 +1,8 @@
 # models.py
 
-# Import db using an absolute import from the top-level 'app' module
-from app import db # <-- CHANGED THIS LINE
+# Import db using a relative import from the main app instance
+# This is correct when the project is treated as a package (due to __init__.py)
+from .app import db
 
 # Define your SQLAlchemy Models
 class Operator(db.Model):
