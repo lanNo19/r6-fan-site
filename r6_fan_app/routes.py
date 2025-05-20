@@ -2,19 +2,21 @@
 
 from flask import render_template, request, jsonify, Blueprint, url_for
 import requests
-import os # Needed to access environment variables for API key
+import os  # Needed to access environment variables for API key
 
 # Import db and models using absolute imports from the r6_fan_app package
-from r6_fan_app import db # <-- CHANGED THIS LINE
-from r6_fan_app.models import Operator, Map, GameInfo # <-- CHANGED THIS LINE
+from r6_fan_app import db
+from r6_fan_app.models import Operator, Map, GameInfo
 
 # Create a Blueprint instance
 main = Blueprint('main', __name__)
+
 
 # Define routes using the blueprint
 @main.route('/')
 def index():
     return render_template('index.html')
+
 
 @main.route('/operators')
 def operators():
@@ -27,6 +29,7 @@ def operators():
         print(f"Error fetching operators: {e}")
         return render_template('error.html', message="Could not load operators."), 500
 
+
 @main.route('/operators/<operator_name_slug>')
 def operator_detail(operator_name_slug):
     operator_name = operator_name_slug.replace('-', ' ').title()
@@ -34,9 +37,12 @@ def operator_detail(operator_name_slug):
         operator_data = Operator.query.filter_by(name=operator_name).first()
 
         if operator_data:
-            operator_data.secondary_gadgets_list = [g.strip() for g in operator_data.secondary_gadgets.split(',')] if operator_data.secondary_gadgets else []
-            operator_data.synergy_list = [op.strip() for op in operator_data.synergy_examples.split(',')] if operator_data.synergy_examples else []
-            operator_data.counter_list = [op.strip() for op in operator_data.counter_examples.split(',')] if operator_data.counter_examples else []
+            operator_data.secondary_gadgets_list = [g.strip() for g in operator_data.secondary_gadgets.split(
+                ',')] if operator_data.secondary_gadgets else []
+            operator_data.synergy_list = [op.strip() for op in operator_data.synergy_examples.split(
+                ',')] if operator_data.synergy_examples else []
+            operator_data.counter_list = [op.strip() for op in operator_data.counter_examples.split(
+                ',')] if operator_data.counter_examples else []
 
             return render_template('operator_detail.html', operator=operator_data)
         else:
@@ -44,6 +50,7 @@ def operator_detail(operator_name_slug):
     except Exception as e:
         print(f"Error fetching operator detail for {operator_name}: {e}")
         return render_template('error.html', message="Could not load operator details."), 500
+
 
 @main.route('/maps')
 def maps_list():
@@ -53,6 +60,7 @@ def maps_list():
     except Exception as e:
         print(f"Error fetching maps: {e}")
         return render_template('error.html', message="Could not load maps."), 500
+
 
 @main.route('/maps/<map_name_slug>')
 def map_detail(map_name_slug):
@@ -73,6 +81,7 @@ def map_detail(map_name_slug):
         print(f"Error fetching map detail for {map_name}: {e}")
         return render_template('error.html', message="Could not load map details."), 500
 
+
 @main.route('/game-info')
 def game_info():
     try:
@@ -82,12 +91,13 @@ def game_info():
         print(f"Error fetching game info: {e}")
         return render_template('error.html', message="Could not load game information."), 500
 
+
 # API Endpoint for Map Sites (Moved from app.py)
 @main.route('/api/map-sites/<map_name>')
 def get_map_sites(map_name):
     mock_map_data = {
         "Bank": ["Vault", "Open Area - Teller", "Archives - Server", "CEO Office"],
-        "Oregon": ["Kitchen", "Kids Bedroom", "Basement"], # Simplified for example
+        "Oregon": ["Kitchen", "Kids Bedroom", "Basement"],  # Simplified for example
         "Coastline": ["Hookah Lounge / Billiards Room", "Blue Bar / Sunrise Bar", "Penthouse / Theater"],
         "Kafe Dostoyevsky": ["Reading Room / Fireplace Hall", "Mining Room / Dining Room", "Kitchen / Bake Shop"],
         "Kanal": ["Secure Containers / Boats", "Server Room / Kayak", "Coast Guard Office / Lounge"],
@@ -100,7 +110,7 @@ def get_map_sites(map_name):
 
 @main.route('/lineup-suggestor', methods=['GET', 'POST'])
 def lineup_suggestor():
-    maps = Map.query.all() # Fetch all maps for the dropdown
+    maps = Map.query.all()  # Fetch all maps for the dropdown
 
     suggested_operators = None
     selected_map_name = None
@@ -143,9 +153,8 @@ def lineup_suggestor():
                 """
 
                 chat_history = []
-                # chat_history.push is JavaScript syntax, use .append for Python list
-                chat_history.append({ "role": "user", "parts": [{ "text": prompt }] })
-                payload = { "contents": chat_history }
+                chat_history.append({"role": "user", "parts": [{"text": prompt}]})
+                payload = {"contents": chat_history}
                 # Get API key from environment variable using the correct name
                 api_key = os.getenv("LLM_API_KEY")
                 if not api_key:
@@ -154,7 +163,7 @@ def lineup_suggestor():
                 # Call the Gemini API
                 api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + api_key
                 response = requests.post(api_url, json=payload)
-                response.raise_for_status() # Raise an exception for HTTP errors
+                response.raise_for_status()  # Raise an exception for HTTP errors
                 result = response.json()
 
                 if result and result.get('candidates'):
@@ -179,7 +188,7 @@ def lineup_suggestor():
             except requests.exceptions.RequestException as req_err:
                 print(f"API request failed: {req_err}")
                 error_message = "Failed to connect to the AI service. Please try again later."
-            except ValueError as val_err: # Catch the new ValueError for missing API key
+            except ValueError as val_err:  # Catch the new ValueError for missing API key
                 print(f"Configuration error: {val_err}")
                 error_message = "Server configuration error: LLM API Key not set."
             except Exception as e:

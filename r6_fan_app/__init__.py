@@ -17,7 +17,7 @@ DB_PASSWORD = os.getenv('password')
 DB_HOST = os.getenv('host')
 DB_PORT = os.getenv('port')
 DB_NAME = os.getenv('dbname')
-LLM_API_KEY = os.getenv('LLM_API_KEY') # Also load LLM API Key here
+LLM_API_KEY = os.getenv('LLM_API_KEY')  # Also load LLM API Key here
 
 if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, LLM_API_KEY]):
     print("Error: Crucial environment variables are not fully set.")
@@ -41,4 +41,3 @@ app.register_blueprint(main_blueprint)
 # --- End Import and Register ---
 
 # No __name__ == '__main__': block here, as run.py handles execution.
-

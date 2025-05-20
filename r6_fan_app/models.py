@@ -3,22 +3,23 @@
 # Import db using an absolute import from the r6_fan_app package
 from r6_fan_app import db
 
+
 # Define your SQLAlchemy Models
 class Operator(db.Model):
     __tablename__ = 'operators'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, unique=True, nullable=False)
-    side = db.Column(db.Text, nullable=False) # 'Attacker' or 'Defender'
-    ability = db.Column(db.Text, nullable=False) # Main unique gadget/skill
+    side = db.Column(db.Text, nullable=False)  # 'Attacker' or 'Defender'
+    ability = db.Column(db.Text, nullable=False)  # Main unique gadget/skill
 
-    secondary_gadgets = db.Column(db.Text) # Storing as comma-separated string
-    armor = db.Column(db.Integer) # 1, 2, or 3
-    speed = db.Column(db.Integer) # 1, 2, or 3
-    role = db.Column(db.Text) # e.g., "Entry Fragger", "Anchor", "Support"
-    short_bio = db.Column(db.Text) # 2-3 sentences summary
-    synergy_examples = db.Column(db.Text) # e.g., "Thatcher, Thermite" (Comma-separated string)
-    counter_examples = db.Column(db.Text) # e.g., "Bandit, Kaid" (Comma-separated string)
-    solo_friendly = db.Column(db.Boolean) # True or False
+    secondary_gadgets = db.Column(db.Text)  # Storing as comma-separated string
+    armor = db.Column(db.Integer)  # 1, 2, or 3
+    speed = db.Column(db.Integer)  # 1, 2, or 3
+    role = db.Column(db.Text)  # e.g., "Entry Fragger", "Anchor", "Support"
+    short_bio = db.Column(db.Text)  # 2-3 sentences summary
+    synergy_examples = db.Column(db.Text)  # e.g., "Thatcher, Thermite" (Comma-separated string)
+    counter_examples = db.Column(db.Text)  # e.g., "Bandit, Kaid" (Comma-separated string)
+    solo_friendly = db.Column(db.Boolean)  # True or False
 
     def __repr__(self):
         return f"<Operator {self.name} ({self.side})>"
@@ -38,6 +39,7 @@ class Operator(db.Model):
             'counter_examples': self.counter_examples,
             'solo_friendly': self.solo_friendly
         }
+
 
 class Map(db.Model):
     __tablename__ = 'maps'
@@ -60,6 +62,7 @@ class Map(db.Model):
             'electricity_needed': self.electricity_needed,
             'description': self.description
         }
+
 
 class GameInfo(db.Model):
     __tablename__ = 'game_info'
