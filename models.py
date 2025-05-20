@@ -1,24 +1,28 @@
-from .app import db
+# models.py
 
+# Import db using an absolute import from the top-level 'app' module
+from app import db # <-- CHANGED THIS LINE
+
+# Define your SQLAlchemy Models
 class Operator(db.Model):
     __tablename__ = 'operators'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, unique=True, nullable=False)
-    side = db.Column(db.Text, nullable=False) # attacker or defender
-    ability = db.Column(db.Text, nullable=False)
-    secondary_gadgets = db.Column(db.Text) # divided by comma
-    armor = db.Column(db.Integer) # 1 | 2 | 3
-    speed = db.Column(db.Integer) # 1 | 2 | 3
-    role = db.Column(db.Text)
+    side = db.Column(db.Text, nullable=False) # 'Attacker' or 'Defender'
+    ability = db.Column(db.Text, nullable=False) # Main unique gadget/skill
+
+    secondary_gadgets = db.Column(db.Text) # Storing as comma-separated string
+    armor = db.Column(db.Integer) # 1, 2, or 3
+    speed = db.Column(db.Integer) # 1, 2, or 3
+    role = db.Column(db.Text) # e.g., "Entry Fragger", "Anchor", "Support"
     short_bio = db.Column(db.Text) # 2-3 sentences summary
-    synergy_examples = db.Column(db.Text) # divided by comma
-    counter_examples = db.Column(db.Text) # divided by comma
-    solo_friendly = db.Column(db.Boolean)
+    synergy_examples = db.Column(db.Text) # e.g., "Thatcher, Thermite" (Comma-separated string)
+    counter_examples = db.Column(db.Text) # e.g., "Bandit, Kaid" (Comma-separated string)
+    solo_friendly = db.Column(db.Boolean) # True or False
 
     def __repr__(self):
         return f"<Operator {self.name} ({self.side})>"
 
-    # serialisation, might be used for JSON
     def to_dict(self):
         return {
             'id': self.id,
@@ -56,7 +60,6 @@ class Map(db.Model):
             'electricity_needed': self.electricity_needed,
             'description': self.description
         }
-
 
 class GameInfo(db.Model):
     __tablename__ = 'game_info'
