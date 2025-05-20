@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Maps - R6 Siege Fan App{% endblock %}
+
+{% block content %}
+    <h1>Rainbow Six Siege Maps</h1>
+
+    <div class="maps-list">
+        {% for map in maps %}
+            <div class="map-item">
+                {# Link to the map detail page using the blueprint endpoint name #}
+                <a href="{{ url_for('main.map_detail', map_name_slug=map.name.replace(' ', '-').lower()) }}"> {# CHANGED TO main.map_detail #}
+                    <img src="{{ map.image_url }}" alt="{{ map.name }} Map Image">
+                    <h3>{{ map.name }}</h3>
+                </a>
+            </div>
+        {% else %}
+            <p>No maps found.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

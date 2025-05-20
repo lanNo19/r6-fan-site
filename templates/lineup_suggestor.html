@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Lineup Suggestor - R6 Siege Fan App{% endblock %}
+
+{% block content %}
+    <h1>Operator Lineup Suggestor</h1>
+
+    <form action="{{ url_for('main.lineup_suggestor') }}" method="post">
+        <div class="form-group">
+            <label for="map">Select Map:</label>
+            <select id="map" name="map" required>
+                <option value="">-- Select a Map --</option>
+                {% for map_item in maps %}
+                    <option value="{{ map_item.name }}" {% if selected_map_name == map_item.name %} selected {% endif %}>{{ map_item.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="site">Enter Defender Site (e.g., "Kitchen", "Basement"):</label>
+            {# Consider adding a dropdown populated based on selected map later if site data is structured #}
+            <input type="text" id="site" name="site" value="{{ selected_site | default('') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Select Your Side:</label><br>
+            <input type="radio" id="side_attacker" name="side" value="Attacker" {% if selected_side == 'Attacker' %} checked {% endif %} required>
+            <label for="side_attacker">Attacker</label><br>
+            <input type="radio" id="side_defender" name="side" value="Defender" {% if selected_side == 'Defender' %} checked {% endif %}>
+            <label for="side_defender">Defender</label>
+        </div>
+
+         <div class="form-group">
+            <label>Are you playing solo or with a team?</label><br>
+            <input type="radio" id="solo_queue_yes" name="solo_queue" value="yes" {% if is_solo_queue %} checked {% endif %} required>
+            <label for="solo_queue_yes">Solo Queue</label><br>
+            <input type="radio" id="solo_queue_no" name="solo_queue" value="no" {% if not is_solo_queue and selected_side %} checked {% endif %}> {# Check 'no' by default if side is selected but solo isn't #}
+            <label for="solo_queue_no">With a Team</label>
+        </div>
+
+
+        <div class="form-group">
+            <label for="situation">Describe the Situation:</label>
+            <textarea id="situation" name="situation" rows="4" required>{{ situation_description | default('') }}</textarea>
+        </div>
+
+        <button type="submit">Get Suggestions</button>
+    </form>
+
+    {# --- Display Suggested Operators Here (Populated in Next Phase) --- #}
+    {% if suggested_operators is defined and suggested_operators %}
+        <h2>Suggested Operators:</h2>
+        <div class="suggested-operators-list">
+            {% for operator in suggested_operators %}
+                <div class="operator-item"> {# Reuse operator-item styling #}
+                    {# Link to operator detail page #}
+                    <a href="{{ url_for('main.operator_detail', operator_name_slug=operator.name.replace(' ', '-').lower()) }}">
+                         {# Placeholder for icon/image #}
+                         {# <img src="{{ url_for('static', filename='images/operators/icons/' + operator.name.replace(' ', '-').lower() + '.png') }}" alt="{{ operator.name }} Icon" class="operator-icon"> #}
+                        <h3>{{ operator.name }}</h3>
+                        <p>Role: {{ operator.role }}</p> {# Display key info #}
+                        <p>Ability: {{ operator.ability }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif request.method == 'POST' %}
+        {# Message if no operators were suggested after a POST request #}
+        <p>No operators suggested for this situation.</p>
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,54 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a; /* Dark background */
+    color: #eee; /* Light text */
+}
+
+header {
+    background-color: #333;
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Arrange links horizontally */
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    padding: 20px;
+}
+
+/* Style for operator list switching */
+#defense-operators {
+    display: none; /* Hide defense by default */
+}
+
+/* Placeholder styling for operator items */
+.operator-item {
+    border: 1px solid #555;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #2a2a2a;
+}
+
+/* Style for homepage image */
+.homepage-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Game Info - R6 Siege Fan App{% endblock %}
+
+{% block content %}
+    <h1>About Rainbow Six Siege</h1>
+
+    {% for section in info_sections %}
+        <section>
+            <h2>{{ section.section_title }}</h2>
+            <p>{{ section.content }}</p>
+        </section>
+    {% else %}
+         <p>No game info found.</p>
+    {% endfor %}
+
+{% endblock %}

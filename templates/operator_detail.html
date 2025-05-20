@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ operator.name }} - R6 Siege Fan App{% endblock %}
+
+{% block content %}
+    {# Link back to the operators list using the blueprint endpoint name #}
+    <a href="{{ url_for('main.operators') }}" class="back-link">&larr; Back to Operators</a> {# CHANGED TO main.operators #}
+
+    <div class="operator-detail-container">
+        <h1>{{ operator.name }}</h1>
+
+        <div class="operator-info">
+            <p><strong>Side:</strong> {{ operator.side }}</p>
+            <p><strong>Ability:</strong> {{ operator.ability }}</p>
+            <p>
+                <strong>Secondary Gadgets:</strong>
+                {% if operator.secondary_gadgets_list %}
+                    {{ operator.secondary_gadgets_list | join(', ') }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+            <p><strong>Armor:</strong> {{ operator.armor }} | <strong>Speed:</strong> {{ operator.speed }}</p>
+            <p><strong>Role:</strong> {{ operator.role }}</p>
+
+            <h3>Bio:</h3>
+            <p>{{ operator.short_bio }}</p>
+
+            <h3>Strategic Insights:</h3>
+            <p>
+                <strong>Synergizes Well With:</strong>
+                {% if operator.synergy_list %}
+                    {{ operator.synergy_list | join(', ') }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+            <p>
+                <strong>Counters:</strong>
+                {% if operator.counter_list %}
+                    {{ operator.counter_list | join(', ') }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+            <p>
+                <strong>Solo Friendly:</strong>
+                {% if operator.solo_friendly %}
+                    Yes, effective for independent play.
+                {% else %}
+                    No, highly team-reliant.
+                {% endif %}
+            </p>
+
+            {# Placeholder for operator image #}
+            {# <img src="{{ url_for('static', filename='images/operators/' + operator.name.replace(' ', '-').lower() + '.png') }}" alt="{{ operator.name }}"> #}
+        </div>
+    </div>
+{% endblock %}

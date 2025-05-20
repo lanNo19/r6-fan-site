@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home - R6 Siege Fan App{% endblock %}
+
+{% block content %}
+    <div class="homepage-content">
+        <h1>Welcome to the Rainbow Six Siege Fan Application!</h1>
+        <p>Explore operators, maps, and game information for Ubisoft's tactical shooter.</p>
+        {# Add placeholder images or other atmospheric elements #}
+        <img src="{{ url_for('static', filename='images/homepage_hero.jpg') }}" alt="R6 Siege Atmosphere">
+        {# Add links to key sections - UPDATED LINKS BELOW #}
+        <p><a href="{{ url_for('main.operators') }}">Meet the Operators</a></p> {# CHANGED TO main.operators #}
+        <p><a href="{{ url_for('main.game_info') }}">Learn about the Game</a></p> {# CHANGED TO main.game_info #}
+    </div>
+{% endblock %}

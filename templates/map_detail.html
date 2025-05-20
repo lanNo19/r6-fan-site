@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ map.name }} - R6 Siege Fan App{% endblock %}
+
+{% block content %}
+    {# Link back to the maps list using the blueprint endpoint name #}
+    <a href="{{ url_for('main.maps_list') }}" class="back-link">&larr; Back to Maps</a> {# CHANGED TO main.maps_list #}
+
+    <div class="map-detail-container">
+        <h1>{{ map.name }}</h1>
+        <img src="{{ map.image_url }}" alt="{{ map.name }} Map Image" class="map-detail-image">
+
+        <div class="map-info">
+            {# Removed release_year as per your requirement #}
+            {# <p><strong>Released:</strong> {{ map.release_year }}</p> #}
+
+            <h3>Defender Sites:</h3>
+            <ul>
+                {% for site in map.defender_sites_list %}
+                    <li>{{ site }}</li>
+                {% endfor %}
+            </ul>
+
+            <p>
+                <strong>Electricity Needed for Walls:</strong>
+                {% if map.electricity_needed %}
+                    <span style="color: green;">High Priority</span> (Many crucial reinforced walls benefit from Bandit/Kaid/Impact EMP)
+                {% else %}
+                    <span style="color: orange;">Moderate/Situational</span> (Fewer critical reinforced walls, or other denial methods are more common)
+                {% endif %}
+            </p>
+
+            <h3>Description:</h3>
+            <p>{{ map.description }}</p>
+        </div>
+    </div>
+{% endblock %}

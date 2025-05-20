@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Error Occurred{% endblock %}
+
+{% block content %}
+    <div class="error-container" style="text-align: center; margin-top: 50px;">
+        <h1 style="color: red; font-size: 2.5em;">An Error Occurred!</h1>
+        {% if message %}
+            <p style="font-size: 1.2em;">{{ message }}</p>
+        {% else %}
+            <p style="font-size: 1.2em;">Something went wrong. Please try again later.</p>
+        {% endif %}
+        {# Link back to the home page using the blueprint endpoint name #}
+        <p style="margin-top: 20px;"><a href="{{ url_for('main.index') }}">Go back to Home</a></p> {# CHANGED TO main.index #}
+    </div>
+{% endblock %}
