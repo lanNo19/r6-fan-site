@@ -13,7 +13,7 @@
 
 ## 1. About
 
-The Rainbow Six Siege Fan Application is a web platform for enthusiasts of Tom Clancy's Rainbow Six Siege. It offers detailed information on in-game operators and maps, and features an AI-powered "Lineup Suggestor" to help players strategize team compositions. This app serves as a valuable resource for both new and experienced players.
+This is a website for Rainbow 6 Siege help for people that only start playing. Since R6 is a character based tactical shooter, choosing the right character can usually win you rounds. So this website features information about operators, their abilities and usages, maps and their peculiarities, and an AI-powered "Lineup Suggestor" to help players choose operators based on their situation.
 
 ## 2. Installation and Launch
 
@@ -62,7 +62,6 @@ To run this project locally:
     python populate_maps.py
     python populate_game_info.py
     ```
-    *(Consider `TRUNCATE TABLE <table_name> RESTART IDENTITY;` in Supabase before populating for clean data.)*
 7.  **Run the Flask application:**
     ```bash
     export FLASK_APP=r6_fan_app  # Windows: set FLASK_APP=r6_fan_app
@@ -72,33 +71,31 @@ To run this project locally:
 
 ## 3. Design Process
 
-The application's development followed an iterative process. It began with establishing a modular Flask structure, integrating the database, and building core informational pages for operators and maps. Subsequent iterations focused on enhancing user experience through client-side JavaScript for dynamic filtering and interactive UI components (like the accordion). The integration of the LLM-powered lineup suggestor was a key later phase, adding an advanced, intelligent feature. Emphasis was consistently placed on ensuring a responsive and intuitive user interface.
+I started with a white list and generating ideas. Since most of my summers of high school were spent playin Siege with my friends, I chose what I know well. The problem for new coming players is complexity of the game: soft walls, one shot headshots. Which is further worsened by almost 60 characters each with a unique ability. I drafted the design of application on paper and UML state machine (which was very simple), then connection with db. Since I am not very proficient with frontend technologies I used templating in Jinja2 and ChatGPT to generate basic templates and styling. Then I connected it with backend using Flask, and at the end added Google's Gemini for LLM support. 
 
 ## 4. Unique Approach
 
-The standout feature is the **LLM-Powered Lineup Suggestor**, which leverages the Google Gemini 2.0 Flash API to provide dynamic, context-aware operator recommendations based on user-described in-game situations. This moves beyond static data, offering intelligent strategic insights. Additionally, the project utilizes a **modular Flask package structure** for improved maintainability and scalability, separating concerns into distinct `__init__.py`, `routes.py`, and `models.py` files within a dedicated application package.
+The standout feature is the **LLM-Powered Lineup Suggestor**, which utilises  Google Gemini 2.0 Flash API to provide dynamic operator recommendations based on user-described in-game situations. This moves beyond static data, offering intelligent strategic insights. 
 
 ## 5. Tradeoffs
 
-* **Mock Map Site Data:** For simplicity and rapid development, map site data is currently mocked within the application code rather than being stored in a more complex database schema.
-* **Basic Search:** The global search uses a simple database `LIKE` query. A more advanced search solution (e.g., full-text search) was not implemented to keep the project scope focused.
-* **Limited LLM Context:** The LLM prompt is concise for efficiency. More detailed in-game context could be provided for even more nuanced suggestions, but this would increase complexity and API latency.
+* **Basic Search:** The global search uses a simple database `LIKE` query and only works on names of characters. Further development would bring search based on words, since most players would not know specific names of gadgets in the game.
+* **Limited LLM Context:** The LLM prompt is concise for efficiency. More detailed in-game context could be provided for even more specific suggestions, but this would increase complexity.
 * **No User Authentication:** The application is purely informational, omitting user authentication or personalized features to simplify development.
 
 ## 6. Limitations
 
-* **Image Placeholders:** Operator portraits and map images are currently static files. A more robust solution for image serving (e.g., CDN integration) is not implemented.
-* **LLM Latency:** Users may experience slight delays when using the Lineup Suggestor due to the external API call to the Gemini model.
-* **Basic Error Handling:** While general error pages exist, more granular error logging and specific user feedback mechanisms could be enhanced for a production environment.
-* **No Database Migrations:** Database schema changes currently require manual SQL commands. A migration tool (e.g., Flask-Migrate/Alembic) is not integrated.
+* **Potential for Outdated Data:** As game updates frequently change operators and existing data was written by hand, it is not adaptive and would require human involvement for updates. The fix would be implementation of web scraper from original game website or official API.
+* **Limited Styling:** As the emphasis was placed on features, application does not stand out graphically.
+* **Cold Start Latency on Render:** Due to using Render's free plan, the application may experience a "cold start" delay (up to minute) when accessed after a period of inactivity.
+
 
 ## 7. Tech Stack
 
-The chosen tech stack balances rapid development, flexibility, and powerful features:
+Tech stack was chosen due to familiarity with Python and Flask being industry standard (some would argue better than Django/FastAPI) and popularity of following services:
 
-* **Python/Flask:** For its speed, flexibility, and suitability for building web applications efficiently.
 * **Flask-SQLAlchemy:** Simplifies database interactions through an ORM, abstracting raw SQL.
-* **Supabase (PostgreSQL):** A managed PostgreSQL database solution that streamlines backend setup and offers scalability.
-* **Google Gemini 2.0 Flash API:** Provides advanced AI capabilities for the core "Lineup Suggestor" feature, chosen for its balance of performance and cost.
+* **Supabase (PostgreSQL):** A managed PostgreSQL database solution that is easy to deploy.
+* **Google Gemini 2.0 Flash API:** Provides advanced AI capabilities for the core "Lineup Suggestor" feature, chosen for its cost.
 * **Render.com:** A convenient and developer-friendly platform that facilitates seamless deployment of Python web services from Git.
 * **HTML/CSS/JavaScript:** Standard web technologies providing complete control over the frontend user experience and responsiveness.
