@@ -58,16 +58,24 @@
     {# --- Display Suggested Operators Here --- #}
     {% if suggested_operators is defined and suggested_operators %}
         <h2>Suggested Operators:</h2>
-        <div class="suggested-operators-list">
+        <div class="suggested-operators-list"> {# This is the grid container #}
             {% for operator in suggested_operators %}
                 <div class="operator-item"> {# Reuse operator-item styling #}
                     {# Link to operator detail page #}
                     <a href="{{ url_for('main.operator_detail', operator_name_slug=operator.name.replace(' ', '-').lower()) }}">
-                         {# Placeholder for icon/image #}
-                         {# <img src="{{ url_for('static', filename='images/operators/icons/' + operator.name.replace(' ', '-').lower() + '.png') }}" alt="{{ operator.name }} Icon" class="operator-icon"> #}
-                        <h3>{{ operator.name }}</h3>
-                        <p>Role: {{ operator.role }}</p> {# Display key info #}
-                        <p>Ability: {{ operator.ability }}</p>
+                         {# NEW: Operator Portrait Image #}
+                         <img src="{{ url_for('static', filename='images/operators/portraits/' + operator.name.replace(' ', '-').lower() + '.png') }}"
+                              alt="{{ operator.name }} Portrait"
+                              class="operator-portrait"
+                              onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholder_portrait.png') }}'">
+                        <div class="operator-name-area"> {# Reuse operator-name-area styling #}
+                            <h3>{{ operator.name }}</h3>
+                            {# Removed Role and Ability from this list view for brevity,
+                               as the main operators page shows more detail.
+                               You can add them back if desired. #}
+                            {# <p>Role: {{ operator.role }}</p> #}
+                            {# <p>Ability: {{ operator.ability }}</p> #}
+                        </div>
                     </a>
                 </div>
             {% endfor %}

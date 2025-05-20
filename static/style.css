@@ -89,23 +89,39 @@ main {
 
 /* --- Operators Page Specific Styling --- */
 
-/* Category Title */
-.operators-category-title {
-    text-align: left;
-    margin-bottom: 10px;
-    font-size: 1.5em;
-    color: #eee;
+/* Style for the main attacker/defender sections */
+#attack-operators,
+#defense-operators {
+    margin-bottom: 30px; /* Space between attacker and defender sections */
+    /* Center the entire section (heading + grid) */
+    max-width: 1040px; /* (5 items * 200px width) + (4 gaps * 10px) = 1040px */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 10px; /* Add horizontal padding to the section */
+    box-sizing: border-box; /* Include padding in width */
 }
 
-/* Operator List Container */
+/* Styling for category titles (now inside the main section but outside the grid) */
+#attack-operators h2,
+#defense-operators h2 {
+    text-align: left; /* Align to the left */
+    margin-top: 30px; /* Space above the heading */
+    margin-bottom: 15px; /* Space below the heading */
+    font-size: 1.8em; /* Make headings prominent */
+    color: #007bff; /* Highlight color for headings */
+    /* No need for max-width/margin auto here, as the parent section handles it */
+}
+
+
 .operator-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 30px; /* Add more space between attacker and defender sections */
-    justify-content: center;
-    padding: 0 10px;
+    /* This will create columns that are at least 200px wide,
+       and then stretch to fill the available space within the parent section's max-width. */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* <-- Use auto-fit here */
+    gap: 10px; /* Keep a reasonable gap */
+    margin-top: 20px;
+    justify-content: center; /* Center items within the grid if there's extra space */
+    /* No padding here, as the parent section handles it */
 }
 
 .operator-item {
@@ -121,8 +137,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    /* Strict max-width for the block (aiming for 130px) */
-    max-width: 130px; /* This is the hard limit for each block's width */
+    /* Strict max-width for the block (200px as requested) */
+    max-width: 200px; /* <-- This is the hard limit for each block's width */
     width: 100%; /* Ensure it takes full width of its grid cell up to max-width */
     justify-self: center; /* Center items within their grid cell if max-width is less than cell width */
 }
@@ -145,12 +161,12 @@ main {
 .operator-portrait {
     width: 100%;
     /* Set a fixed height for the portrait to ensure consistent block height,
-       and use object-fit to crop if aspect ratio is off. Adjusted for 130px width. */
-    height: 100px; /* Fixed height for the portrait */
+       and use object-fit to crop if aspect ratio is off. Scaled for 200px width. */
+    height: 160px; /* Fixed height for the portrait */
     display: block;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    object-fit: cover; /* This will crop the image to fit the 130px width and 100px height */
+    object-fit: cover; /* This will crop the image to fit the 200px width and 160px height */
     flex-grow: 0; /* Prevent it from growing */
     flex-shrink: 0; /* Prevent it from shrinking */
 }
@@ -158,7 +174,7 @@ main {
 /* New styling for the operator name area */
 .operator-name-area {
     background-color: #222;
-    padding: 5px 3px; /* Adjusted padding */
+    padding: 8px 5px; /* Padding for the name area */
     text-align: center;
     width: 100%;
     box-sizing: border-box;
@@ -166,7 +182,7 @@ main {
 
 .operator-name-area h3 {
     margin: 0;
-    font-size: 0.8em; /* Adjusted font size */
+    font-size: 1em; /* Font size for the name */
     color: #eee;
     white-space: nowrap;
     overflow: hidden;
@@ -210,6 +226,10 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive columns */
     gap: 20px; /* Space between grid items */
     margin-top: 20px;
+    /* Added max-width and margin auto for consistency, if maps also appear too wide */
+    max-width: 1000px; /* Example: 5 items * 150px + 4 gaps * 20px = 750 + 80 = 830px. Add buffer. */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .map-item {
@@ -238,6 +258,25 @@ main {
     border-radius: 4px;
     margin-bottom: 10px;
 }
+
+/* --- Lineup Suggestor Specific Styling --- */
+.suggested-operators-list {
+    display: grid;
+    /* Use auto-fit to create as many columns as possible.
+       minmax(200px, 1fr) means columns will be at least 200px wide,
+       and stretch to fill the available space. */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px; /* Consistent gap with operators page */
+    margin-top: 20px;
+    /* Match the max-width and centering of the main operator sections to ensure consistency */
+    max-width: 1040px; /* (5 items * 200px width) + (4 gaps * 10px) = 1040px */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 10px; /* Add horizontal padding */
+    box-sizing: border-box; /* Include padding in width */
+    justify-content: center; /* Center items within the grid if there's extra space */
+}
+
 
 /* Style for the Lineup Suggestor form */
 form {
@@ -296,6 +335,67 @@ p[style*="color: red"] {
     margin-top: 10px;
 }
 
+/* --- Game Info Page Styling --- */
+.accordion-container {
+    max-width: 800px; /* Limit width of the accordion for readability */
+    margin: 20px auto; /* Center the accordion */
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners are applied */
+}
+
+.accordion-item {
+    border-bottom: 1px solid #444; /* Separator between items */
+}
+
+.accordion-item:last-child {
+    border-bottom: none; /* No border on the last item */
+}
+
+.accordion-header {
+    background-color: #333;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+    background-color: #444;
+}
+
+.accordion-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #eee;
+}
+
+.accordion-icon {
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(180deg); /* Rotate icon when active */
+}
+
+.accordion-content {
+    background-color: #2a2a2a; /* Slightly lighter background for content */
+    max-height: 0; /* Hidden by default */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; /* Smooth transition for expand/collapse */
+    padding: 0 20px; /* Initial padding for content */
+}
+
+.accordion-content p {
+    padding: 15px 0; /* Padding for the text inside content */
+    margin: 0; /* Remove default paragraph margin */
+    line-height: 1.6;
+    color: #bbb;
+}
+
 /* Footer styling */
 footer {
     text-align: center;
@@ -304,15 +404,4 @@ footer {
     background-color: #333;
     color: #bbb;
     font-size: 0.9em;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .navbar-left ul {
-        gap: 10px; /* Reduce spacing between nav items */
-    }
-
-    .operator-list {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Slightly smaller on mobile */
-    }
 }

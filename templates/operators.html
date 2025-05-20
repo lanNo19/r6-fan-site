@@ -11,42 +11,46 @@
     </div>
 
     {# --- ATTACKERS SECTION --- #}
-    <div id="attack-operators" class="operator-list">
-        <h2>Attackers</h2> {# <-- THIS H2 IS INSIDE #}
-        {% for operator in attackers %}
-            <div class="operator-item" data-operator-name="{{ operator.name }}">
-                <a href="{{ url_for('main.operator_detail', operator_name_slug=operator.name.replace(' ', '-').lower()) }}">
-                    <img src="{{ url_for('static', filename='images/operators/portraits/' + operator.name.replace(' ', '-').lower() + '.png') }}"
-                         alt="{{ operator.name }} Portrait"
-                         class="operator-portrait"
-                         onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholder_portrait.png') }}';">
-                    <div class="operator-name-area">
-                        <h3>{{ operator.name }}</h3>
-                    </div>
-                </a>
-            </div>
-        {% else %}
-            <p>No attackers found.</p>
-        {% endfor %}
+    <div id="attack-operators">
+        <h2>Attackers</h2>
+        <div class="operator-list">
+            {% for operator in attackers %}
+                <div class="operator-item" data-operator-name="{{ operator.name }}">
+                    <a href="{{ url_for('main.operator_detail', operator_name_slug=operator.name.replace(' ', '-').lower()) }}">
+                        <img src="{{ url_for('static', filename='images/operators/portraits/' + operator.name.replace(' ', '-').lower() + '.png') }}"
+                             alt="{{ operator.name }} Portrait"
+                             class="operator-portrait"
+                             onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholder_portrait.png') }}'" >
+                        <div class="operator-name-area">
+                            <h3>{{ operator.name }}</h3>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <p>No attackers found.</p>
+            {% endfor %}
+        </div>
     </div>
 
     {# --- DEFENDERS SECTION --- #}
-    <div id="defense-operators" class="operator-list">
-        <h2>Defenders</h2> {# <-- THIS H2 IS INSIDE #}
-        {% for operator in defenders %}
-            <div class="operator-item" data-operator-name="{{ operator.name }}">
-                <a href="{{ url_for('main.operator_detail', operator_name_slug=operator.name.replace(' ', '-').lower()) }}">
-                    <img src="{{ url_for('static', filename='images/operators/portraits/' + operator.name.replace(' ', '-').lower() + '.png') }}"
-                         alt="{{ operator.name }} Portrait"
-                         class="operator-portrait"
-                         onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholder_portrait.png') }}';">
-                    <div class="operator-name-area">
-                        <h3>{{ operator.name }}</h3>
-                    </div>
-                </a>
-            </div>
-        {% else %}
-            <p>No defenders found.</p>
-        {% endfor %}
+    <div id="defense-operators">
+        <h2>Defenders</h2>
+        <div class="operator-list">
+            {% for operator in defenders %}
+                <div class="operator-item" data-operator-name="{{ operator.name }}">
+                    <a href="{{ url_for('main.operator_detail', operator_name_slug=operator.name.replace(' ', '-').lower()) }}">
+                        <img src="{{ url_for('static', filename='images/operators/portraits/' + operator.name.replace(' ', '-').lower() + '.png') }}"
+                             alt="{{ operator.name }} Portrait"
+                             class="operator-portrait"
+                             onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholder_portrait.png') }}'" >
+                        <div class="operator-name-area">
+                            <h3>{{ operator.name }}</h3>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <p>No defenders found.</p>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
