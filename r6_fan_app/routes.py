@@ -1,13 +1,12 @@
-# routes.py
+# r6_fan_app/routes.py
 
 from flask import render_template, request, jsonify, Blueprint, url_for
-import requests # Needed for LLM API calls
+import requests
 import os # Needed to access environment variables for API key
 
-# Import db and models using relative imports from the top-level 'app' module
-# This is correct when the project is treated as a package (due to __init__.py)
-from .app import db
-from .models import Operator, Map, GameInfo
+# Import db and models using absolute imports from the r6_fan_app package
+from r6_fan_app import db # <-- CHANGED THIS LINE
+from r6_fan_app.models import Operator, Map, GameInfo # <-- CHANGED THIS LINE
 
 # Create a Blueprint instance
 main = Blueprint('main', __name__)
@@ -144,10 +143,11 @@ def lineup_suggestor():
                 """
 
                 chat_history = []
-                chat_history.push({ "role": "user", "parts": [{ "text": prompt }] })
+                # chat_history.push is JavaScript syntax, use .append for Python list
+                chat_history.append({ "role": "user", "parts": [{ "text": prompt }] })
                 payload = { "contents": chat_history }
-                # FIX: Get API key from environment variable using the correct name
-                api_key = os.getenv("LLM_API_KEY") # <-- CHANGED THIS LINE
+                # Get API key from environment variable using the correct name
+                api_key = os.getenv("LLM_API_KEY")
                 if not api_key:
                     raise ValueError("LLM_API_KEY environment variable not set.")
 
@@ -212,5 +212,3 @@ def search_operators():
     except Exception as e:
         print(f"Error during search API call: {e}")
         return jsonify({'error': 'Could not perform search'}), 500
-
-# No __init__ == '__main__': block here.

@@ -1,4 +1,4 @@
-# app.py
+# r6_fan_app/__init__.py
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -17,11 +17,12 @@ DB_PASSWORD = os.getenv('password')
 DB_HOST = os.getenv('host')
 DB_PORT = os.getenv('port')
 DB_NAME = os.getenv('dbname')
+LLM_API_KEY = os.getenv('LLM_API_KEY') # Also load LLM API Key here
 
-if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]):
-    print("Error: Crucial database environment variables are not fully set.")
-    print("Ensure user, password, host, port, and dbname are in your .env file.")
-    raise EnvironmentError("Required database connection details missing from environment variables.")
+if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, LLM_API_KEY]):
+    print("Error: Crucial environment variables are not fully set.")
+    print("Ensure user, password, host, port, dbname, and LLM_API_KEY are in your .env file.")
+    raise EnvironmentError("Required environment variables missing from .env or environment.")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -32,15 +33,12 @@ db = SQLAlchemy(app)
 
 # --- Import and Register Blueprints ---
 # Import the Blueprint from routes.py using a relative import
-# This is correct when the project is treated as a package (due to __init__.py)
+# This is correct because __init__.py and routes.py are now in the same package
 from .routes import main as main_blueprint
 
 # Register the blueprint with the app instance
 app.register_blueprint(main_blueprint)
 # --- End Import and Register ---
 
+# No __name__ == '__main__': block here, as run.py handles execution.
 
-# This block runs when you execute `python app.py` directly (for local development)
-if __name__ == '__main__':
-    print("Attempting to run Flask app locally...")
-    app.run(debug=True)

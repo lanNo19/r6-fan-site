@@ -1,8 +1,7 @@
-# models.py
+# r6_fan_app/models.py
 
-# Import db using a relative import from the main app instance
-# This is correct when the project is treated as a package (due to __init__.py)
-from .app import db
+# Import db using an absolute import from the r6_fan_app package
+from r6_fan_app import db
 
 # Define your SQLAlchemy Models
 class Operator(db.Model):
