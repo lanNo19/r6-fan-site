@@ -1,7 +1,7 @@
 # routes.py
 
-from flask import render_template, request, jsonify, Blueprint, url_for, operator
-import requests # <-- ADDED THIS LINE
+from flask import render_template, request, jsonify, Blueprint, url_for
+import requests
 
 # Import db and models using absolute imports from the top-level 'app' module
 from app import db
@@ -20,6 +20,7 @@ def operators():
     try:
         operators_data = Operator.query.all()
         attackers = [op for op in operators_data if op.side == 'Attacker']
+        # FIX: Corrected list comprehension syntax
         defenders = [op for op in operators_data if op.side == 'Defender']
         return render_template('operators.html', attackers=attackers, defenders=defenders)
     except Exception as e:
@@ -35,7 +36,7 @@ def operator_detail(operator_name_slug):
         if operator_data:
             operator_data.secondary_gadgets_list = [g.strip() for g in operator_data.secondary_gadgets.split(',')] if operator_data.secondary_gadgets else []
             operator_data.synergy_list = [op.strip() for op in operator_data.synergy_examples.split(',')] if operator_data.synergy_examples else []
-            operator_data.counter_list = [op.strip() for op in operator.counter_examples.split(',')] if operator.counter_examples else []
+            operator_data.counter_list = [op.strip() for op in operator_data.counter_examples.split(',')] if operator_data.counter_examples else []
 
             return render_template('operator_detail.html', operator=operator_data)
         else:
