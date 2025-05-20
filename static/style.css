@@ -1,54 +1,318 @@
+/* Basic Body and Header Styling (adjust as needed) */
 body {
-    font-family: sans-serif;
+    font-family: sans-serif; /* Or your chosen font */
     margin: 0;
-    padding: 0;
-    background-color: #1a1a1a; /* Dark background */
+    padding-top: 60px; /* Add padding to body to prevent content from being hidden by fixed header */
+    background-color: #222; /* Dark background */
     color: #eee; /* Light text */
 }
 
 header {
-    background-color: #333;
+    background-color: #333; /* Darker header background */
     padding: 10px 20px;
+    position: fixed; /* Keep header at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width */
+    z-index: 1000; /* Ensure header is above other content */
 }
 
-nav ul {
-    list-style: none;
+/* Navigation Bar Styling using Flexbox */
+.navbar {
+    display: flex; /* Enable Flexbox */
+    justify-content: space-between; /* Push left and right containers to edges */
+    align-items: center; /* Vertically align items in the center */
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+.navbar-left ul {
+    list-style: none; /* Remove bullet points */
     padding: 0;
     margin: 0;
-    display: flex; /* Arrange links horizontally */
+    display: flex; /* Enable Flexbox for list items */
+    gap: 20px; /* Add space between list items */
 }
 
-nav ul li {
-    margin-right: 20px;
+.navbar-left li a {
+    color: #eee; /* Link color */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s ease; /* Smooth color transition on hover */
 }
 
-nav a {
+.navbar-left li a:hover {
+    color: #007bff; /* Highlight color on hover (adjust as needed) */
+}
+
+.navbar-right .global-search-container {
+    display: flex; /* Align search input and button horizontally */
+    gap: 10px; /* Space between input and button */
+    align-items: center; /* Vertically align input and button */
+}
+
+/* Style the search input and button (adjust as needed) */
+.navbar-right #search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.navbar-right #search-button {
+    padding: 5px 10px;
+    background-color: #007bff; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-right #search-button:hover {
+    background-color: #0056b3; /* Darker color on hover */
+}
+
+
+/* Add or update other styles for your content sections (homepage, operators list, etc.) */
+/* Example styling for content areas */
+main {
+    padding: 20px; /* Add padding around main content */
+    width: 100%;
+    max-width: 100%; /* Explicitly remove any default max-width */
+    box-sizing: border-box;
+}
+
+.homepage-content {
+    padding: 40px 20px;
+}
+
+/* --- Operators Page Specific Styling --- */
+
+/* Category Title */
+.operators-category-title {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 1.5em;
     color: #eee;
+}
+
+/* Operator List Container */
+.operator-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 30px; /* Add more space between attacker and defender sections */
+    justify-content: center;
+    padding: 0 10px;
+}
+
+.operator-item {
+    background-color: #333;
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
     text-decoration: none;
+    color: #eee;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* Strict max-width for the block (aiming for 130px) */
+    max-width: 130px; /* This is the hard limit for each block's width */
+    width: 100%; /* Ensure it takes full width of its grid cell up to max-width */
+    justify-self: center; /* Center items within their grid cell if max-width is less than cell width */
+}
+
+.operator-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.operator-item a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.operator-portrait {
+    width: 100%;
+    /* Set a fixed height for the portrait to ensure consistent block height,
+       and use object-fit to crop if aspect ratio is off. Adjusted for 130px width. */
+    height: 100px; /* Fixed height for the portrait */
+    display: block;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    object-fit: cover; /* This will crop the image to fit the 130px width and 100px height */
+    flex-grow: 0; /* Prevent it from growing */
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+/* New styling for the operator name area */
+.operator-name-area {
+    background-color: #222;
+    padding: 5px 3px; /* Adjusted padding */
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.operator-name-area h3 {
+    margin: 0;
+    font-size: 0.8em; /* Adjusted font size */
+    color: #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Style for the operator filter buttons */
+.operator-filter {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.operator-filter button {
+    padding: 8px 15px;
+    margin: 0 5px;
+    background-color: #555;
+    color: #eee;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.operator-filter button:hover {
+    background-color: #777;
+}
+
+/* Style for search results info */
+.search-results-info {
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+    color: #bbb;
+}
+
+/* --- Maps List Specific Styling --- */
+/* Keep existing styles for maps-list and map-item */
+.maps-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Space between grid items */
+    margin-top: 20px;
+}
+
+.map-item {
+    background-color: #444;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none; /* Remove underline from item links */
+    color: #eee;
+    transition: transform 0.2s ease;
+}
+
+.map-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.map-item a {
+    text-decoration: none; /* Ensure links inside items don't have underlines */
+    color: inherit; /* Inherit text color */
+    display: block; /* Make the entire item clickable */
+}
+
+.map-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Style for the Lineup Suggestor form */
+form {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 20px auto; /* Center the form */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block; /* Labels on their own line */
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-main {
-    padding: 20px;
-}
-
-/* Style for operator list switching */
-#defense-operators {
-    display: none; /* Hide defense by default */
-}
-
-/* Placeholder styling for operator items */
-.operator-item {
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+    width: calc(100% - 12px); /* Adjust width for padding/border */
+    padding: 8px;
     border: 1px solid #555;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #2a2a2a;
+    border-radius: 4px;
+    background-color: #444;
+    color: #eee;
 }
 
-/* Style for homepage image */
-.homepage-content img {
-    max-width: 100%;
-    height: auto;
+.form-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+button[type="submit"] {
     display: block;
-    margin: 20px auto;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Style for error messages */
+p[style*="color: red"] {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #333;
+    color: #bbb;
+    font-size: 0.9em;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .navbar-left ul {
+        gap: 10px; /* Reduce spacing between nav items */
+    }
+
+    .operator-list {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Slightly smaller on mobile */
+    }
 }

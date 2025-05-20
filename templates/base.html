@@ -8,18 +8,21 @@
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                <li><a href="{{ url_for('main.operators') }}">Operators</a></li>
-                <li><a href="{{ url_for('main.maps_list') }}">Maps</a></li>
-                <li><a href="{{ url_for('main.game_info') }}">Game Info</a></li>
-                {# ADD THIS NEW LINK #}
-                <li><a href="{{ url_for('main.lineup_suggestor') }}">Lineup Suggestor</a></li>
-            </ul>
-            <div class="global-search-container">
-                <input type="text" id="search-input" placeholder="Search operators...">
-                <button id="search-button">Search</button>
+        <nav class="navbar"> {# Add a class for styling #}
+            <div class="navbar-left"> {# Container for navigation links #}
+                <ul>
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('main.operators') }}">Operators</a></li>
+                    <li><a href="{{ url_for('main.maps_list') }}">Maps</a></li>
+                    <li><a href="{{ url_for('main.game_info') }}">Game Info</a></li>
+                    <li><a href="{{ url_for('main.lineup_suggestor') }}">Lineup Suggestor</a></li>
+                </ul>
+            </div>
+            <div class="navbar-right"> {# Container for search bar #}
+                <div class="global-search-container">
+                    <input type="text" id="search-input" placeholder="Search operators...">
+                    <button id="search-button">Search</button>
+                </div>
             </div>
         </nav>
     </header>

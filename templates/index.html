@@ -1,15 +1,39 @@
 {% extends "base.html" %}
 
-{% block title %}Home - R6 Siege Fan App{% endblock %}
+{% block title %}Welcome - R6 Siege Fan App{% endblock %} {# Updated title #}
 
 {% block content %}
     <div class="homepage-content">
         <h1>Welcome to the Rainbow Six Siege Fan Application!</h1>
-        <p>Explore operators, maps, and game information for Ubisoft's tactical shooter.</p>
+        <p>Explore detailed information about operators and maps, learn about game mechanics, and get AI-powered operator lineup suggestions for your matches.</p> {# Expanded introductory text #}
+
         {# Add placeholder images or other atmospheric elements #}
-        <img src="{{ url_for('static', filename='images/homepage_hero.jpg') }}" alt="R6 Siege Atmosphere">
-        {# Add links to key sections - UPDATED LINKS BELOW #}
-        <p><a href="{{ url_for('main.operators') }}">Meet the Operators</a></p> {# CHANGED TO main.operators #}
-        <p><a href="{{ url_for('main.game_info') }}">Learn about the Game</a></p> {# CHANGED TO main.game_info #}
+        {# You can replace this with a more visually appealing hero section later #}
+        <img src="{{ url_for('static', filename='images/homepage_hero.jpg') }}" alt="Rainbow Six Siege Atmosphere" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 8px;"> {# Added some basic inline styling for the image #}
+
+        <h2>Explore the App:</h2> {# New section heading #}
+
+        <div class="homepage-links"> {# Container for the descriptive links #}
+            <div class="homepage-link-item">
+                <h3><a href="{{ url_for('main.operators') }}">Operators</a></h3> {# Link to Operators page #}
+                <p>Browse a comprehensive list of all Rainbow Six Siege operators, view their abilities, gadgets, stats, bio, and strategic insights.</p> {# Description #}
+            </div>
+
+            <div class="homepage-link-item">
+                <h3><a href="{{ url_for('main.maps_list') }}">Maps</a></h3> {# Link to Maps page #}
+                <p>Discover the various maps in the game, see their defender sites, and learn key details about their layouts and features.</p> {# Description #}
+            </div>
+
+            <div class="homepage-link-item">
+                <h3><a href="{{ url_for('main.game_info') }}">Game Info</a></h3> {# Link to Game Info page #}
+                <p>Find information about core game mechanics, strategies, and other helpful details about Rainbow Six Siege.</p> {# Description #}
+            </div>
+
+            <div class="homepage-link-item">
+                <h3><a href="{{ url_for('main.lineup_suggestor') }}">Lineup Suggestor</a></h3> {# Link to Lineup Suggestor page #}
+                <p>Get AI-powered operator suggestions tailored to specific maps, sites, your side (Attacker/Defender), team size, and the current in-game situation.</p> {# Description #}
+            </div>
+        </div>
+
     </div>
 {% endblock %}

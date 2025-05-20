@@ -5,6 +5,11 @@
 {% block content %}
     <h1>Operator Lineup Suggestor</h1>
 
+    {# Display any error message passed from the backend #}
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
     <form action="{{ url_for('main.lineup_suggestor') }}" method="post">
         <div class="form-group">
             <label for="map">Select Map:</label>
@@ -17,9 +22,12 @@
         </div>
 
         <div class="form-group">
-            <label for="site">Enter Defender Site (e.g., "Kitchen", "Basement"):</label>
-            {# Consider adding a dropdown populated based on selected map later if site data is structured #}
-            <input type="text" id="site" name="site" value="{{ selected_site | default('') }}" required>
+            <label for="site">Select Defender Site:</label>
+            {# The site dropdown will now be populated by JavaScript #}
+            <select id="site" name="site" required>
+                 <option value="">-- Select a Site --</option>
+                 {# Options will be added here dynamically by JavaScript #}
+            </select>
         </div>
 
         <div class="form-group">
@@ -47,7 +55,7 @@
         <button type="submit">Get Suggestions</button>
     </form>
 
-    {# --- Display Suggested Operators Here (Populated in Next Phase) --- #}
+    {# --- Display Suggested Operators Here --- #}
     {% if suggested_operators is defined and suggested_operators %}
         <h2>Suggested Operators:</h2>
         <div class="suggested-operators-list">
@@ -69,5 +77,74 @@
         <p>No operators suggested for this situation.</p>
     {% endif %}
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapSelect = document.getElementById('map');
+            const siteSelect = document.getElementById('site');
+            // Get the initially selected site and map from Flask context
+            const initialSelectedSite = "{{ selected_site | default('') }}";
+            const initialSelectedMap = mapSelect.value;
+
+
+            // Function to fetch and populate sites
+            function populateSites(mapName, selectedSite = '') {
+                // Clear current site options (except the default "-- Select a Site --")
+                siteSelect.innerHTML = '<option value="">-- Select a Site --</option>';
+                siteSelect.disabled = true; // Disable while loading
+
+                if (!mapName) {
+                    siteSelect.disabled = false;
+                    return; // No map selected, nothing to load
+                }
+
+                // Fetch sites from the new API endpoint
+                fetch(`/api/map-sites/${encodeURIComponent(mapName)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(`Sites for ${mapName}:`, data);
+                        if (data.sites && Array.isArray(data.sites)) {
+                            data.sites.forEach(site => {
+                                const option = document.createElement('option');
+                                option.value = site;
+                                option.textContent = site;
+                                if (site === selectedSite) {
+                                    option.selected = true; // Select the site if it matches the initial value
+                                }
+                                siteSelect.appendChild(option);
+                            });
+                        } else {
+                            console.warn(`API did not return expected 'sites' array for ${mapName}`);
+                        }
+                        siteSelect.disabled = false; // Enable dropdown
+                    })
+                    .catch(error => {
+                        console.error('Error fetching map sites:', error);
+                        siteSelect.disabled = false; // Enable dropdown even on error
+                        // Optionally display an error message to the user
+                        alert('Could not load sites for the selected map.');
+                    });
+            }
+
+            // Event listener for map selection change
+            mapSelect.addEventListener('change', function() {
+                const selectedMapName = this.value;
+                populateSites(selectedMapName); // Populate sites when map changes
+            });
+
+            // Initial population on page load if a map is already selected (e.g., after form submission)
+            if (initialSelectedMap) {
+                console.log(`Initial map selected on load: ${initialSelectedMap}. Populating sites.`);
+                populateSites(initialSelectedMap, initialSelectedSite); // Populate sites with the initial selected site
+            } else {
+                 // If no initial map selected, ensure site dropdown is enabled but empty
+                 siteSelect.disabled = false;
+            }
+        });
+    </script>
 
 {% endblock %}
